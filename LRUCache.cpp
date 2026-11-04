@@ -5,42 +5,66 @@
 
 LRUCache::LRUCache(int capacity)
 {
-    
+    this->capacity = capacity;
+    compteur = 0;
+    head = nullptr; tail = nullptr;
 
 }
 
 LRUCache::~LRUCache()
 {
-    
+ 
+    //Destruction du cache par parcours de la liste chaîné
+    Node* courant = head;
+    while (courant != nullptr) {
+        Node* suivant = courant->next;
+        delete courant;
+        courant = suivant;
+    }
+
 }
 
 bool LRUCache::contains(int key) const
 {
-    // TODO
-    return false;
+    return (cache.contains(key));
 }
 
 double LRUCache::get(int key)
 {
-    // TODO
-    throw std::out_of_range("TODO: get() not implemented");
+    if(cache.contains(key)){
+        this->moveToMostRecent(cache[key]);
+        return cache[key]->value;
+    }else{
+        throw std::out_of_range("cach miss");   
+    }
 }
 
 void LRUCache::put(int key, double value)
 {
-    // TODO
+    if(cache.contains(key)){ //Cas n°1 : la clé existe déjà
+        cache[key]->value = value;
+        this->moveToMostRecent(cache[key]);
+    }else{ // Cas n°2 : La clé n'existe pas
+        Node* noeud = new Node{compteur, value, nullptr, nullptr};
+        this->appendToTail(noeud);
+        cache[noeud->key] = noeud; //Ajout au cache
+        if(cache.size() > capacity){ //Si il y a trop d'élément on supprime
+            Node* h = head;
+            this->removeNode(head);
+            cache.erase(h->key);
+            delete h;
+        }
+    }
 }
 
 int LRUCache::size() const
 {
-    // TODO
-    return 0;
+    return cache.size();
 }
 
 int LRUCache::getCapacity() const
 {
-    // TODO
-    return 0;
+    return capacity;
 }
 
 void LRUCache::printCache() const
@@ -92,8 +116,6 @@ Paramètre :
         tail = node;
         tail->next = nullptr; //On evite tous probleme en resettant le next de la queue
     }
-    
-    cache[node->key] = node; //Ajout au cache
 
 }
 

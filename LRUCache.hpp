@@ -38,6 +38,8 @@ private:
     int capacity;
     std::unordered_map<int, Node*> cache;
 
+    int compteur;
+
     /*
      * Implementation intentionally left free.
      *
