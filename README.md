@@ -1,5 +1,9 @@
 # Projet LRU - Squelette libre
 
+# Compilateur
+
+g++ -std=c++20 -Wall -Wextra -O2 LRUCache.cpp main.cpp Parser.cpp -o program.exe && program.exe [taille du cache] [fichier]
+
 ## Principe
 
 Le squelette fournit uniquement :
