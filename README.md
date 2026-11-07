@@ -6,4 +6,4 @@ g++ -std=c++20 -Wall -Wextra -O2 LRUCache.cpp main.cpp Parser.cpp LFUCache.cpp F
 
 ##Remarque
 
-Remarque sur le LFU : l’implémentation LFUCache n’est pas un LFU « classique » (compteur d’accès brut). Elle évince l’élément dont le taux d’utilisation est le plus faible, c’est-à-dire nombre d'accès / (temps actuel − temps d'arrivée dans le cache).
+Remarque sur le LFU : l’implémentation LFUCache évince l’élément dont le taux d’utilisation est le plus faible, c’est-à-dire nombre d'accès / (temps actuel − temps d'arrivée dans le cache).
