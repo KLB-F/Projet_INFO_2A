@@ -3,16 +3,27 @@
 #include <vector>
 
 #include "LRUCache.hpp"
+#include "FIFO.hpp"
+#include "LFUCache.hpp"
 #include "Parser.hpp"
 
 using namespace std;
 
-/*int main(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
+
+    bool utiliseFIFO = false;
+    bool utiliseLFU = false;
+
     if (argc < 3) {
         std::cout << "Usage: " << argv[0]
                   << " <capacity> <access_file>\n";
         return 0;
+    }
+
+    if(argc > 3){ //Choix du type de cache
+        if(std::string(argv[3]) =="FIFO"){ utiliseFIFO = true; }
+        else if(std::string(argv[3]) =="LFU"){ utiliseLFU = true; }
     }
 
     const int capacity = std::stoi(argv[1]);
@@ -29,6 +40,8 @@ using namespace std;
     }
 
     LRUCache cache(capacity);
+    FIFO cacheFIFO(capacity);
+    LFUCache cacheLFU(capacity);
 
     int hits = 0;
     int misses = 0;
@@ -37,23 +50,50 @@ using namespace std;
 
         std::cout << "\nAccess to block " << key << '\n';
 
-        
-         * TODO
-         *
-         * - if key is already in the cache:
-         *      count a hit;
-         *      access it using get(key);
-         *
-         * - otherwise:
-         *      count a miss;
-         *      simulate loading using put(key, value).
-         *
-         * The value can simply be:
-         *
-         *      double value = static_cast<double>(key);
-         
+        double value = static_cast<double>(key);
 
-        cache.printCache();
+
+        if(utiliseFIFO){
+
+            if(cacheFIFO.contains(key)){
+                hits++;
+                cacheFIFO.get(key);
+                
+            }else{
+                misses++;
+                cacheFIFO.put(key, value);
+            }
+
+            cacheFIFO.printCache();
+           
+
+        }else if(utiliseLFU){
+        
+            if(cacheLFU.contains(key)){
+                hits++;
+                cacheLFU.get(key);
+                
+            }else{
+                misses++;
+                cacheLFU.put(key, value);
+            }
+
+            cacheLFU.printCache();
+
+        }else{
+
+             if(cache.contains(key)){
+                hits++;
+                cache.get(key);
+            }else{
+                misses++;
+                cache.put(key, value);
+            }
+
+            cache.printCache();
+
+        }
+
     }
 
     std::cout << "\n--- Results ---\n";
@@ -68,14 +108,4 @@ using namespace std;
     }
 
     return 0;
-}*/
-
-int main(){
-
-    LRUCache* cache = new LRUCache(1);
-
-    Node noeud = {1, 0, nullptr, nullptr};
-
-    delete cache;
-
 }

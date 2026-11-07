@@ -17,18 +17,18 @@ struct Node {
 class LRUCache {
 public:
     explicit LRUCache(int capacity);
-    ~LRUCache();
+    virtual ~LRUCache();
 
     bool contains(int key) const;
-    double get(int key);
-    void put(int key, double value);
+    virtual double get(int key);
+    virtual void put(int key, double value);
 
     int size() const;
     int getCapacity() const;
 
-    void printCache() const;
+    virtual void printCache() const;
 
-private:
+protected:
     void removeNode(Node* node);
     void appendToTail(Node* node);
     void moveToMostRecent(Node* node);
@@ -37,8 +37,6 @@ private:
     Node* tail;
     int capacity;
     std::unordered_map<int, Node*> cache;
-
-    int compteur;
 
     /*
      * Implementation intentionally left free.

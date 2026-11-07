@@ -2,11 +2,11 @@
 
 #include <stdexcept>
 #include <unordered_map>
+#include <iostream>
 
 LRUCache::LRUCache(int capacity)
 {
     this->capacity = capacity;
-    compteur = 0;
     head = nullptr; tail = nullptr;
 
 }
@@ -26,11 +26,20 @@ LRUCache::~LRUCache()
 
 bool LRUCache::contains(int key) const
 {
+/*
+* Retourne : si la clé key est contenue dans le cache
+*/
     return (cache.contains(key));
 }
 
 double LRUCache::get(int key)
 {
+/*
+* Paramètre : la clé key supposé être présente dans le cache
+* 
+* Retourne la valeur de l'élément de clé key stocké dans le cache
+* | ! | Throw une exception "cach miss" si la clé key n'est pas dans le cache
+*/
     if(cache.contains(key)){
         this->moveToMostRecent(cache[key]);
         return cache[key]->value;
@@ -41,14 +50,22 @@ double LRUCache::get(int key)
 
 void LRUCache::put(int key, double value)
 {
+/*
+* Permet d'ajouter ou de mettre à jour une valeur (value) dans le cache
+* 
+* Paramètres :
+* value - La valeur à ajouter / mettre à jour
+* key - La clé correspondante 
+*/
+
     if(cache.contains(key)){ //Cas n°1 : la clé existe déjà
         cache[key]->value = value;
         this->moveToMostRecent(cache[key]);
     }else{ // Cas n°2 : La clé n'existe pas
-        Node* noeud = new Node{compteur, value, nullptr, nullptr};
+        Node* noeud = new Node{key, value, nullptr, nullptr};
         this->appendToTail(noeud);
         cache[noeud->key] = noeud; //Ajout au cache
-        if(cache.size() > capacity){ //Si il y a trop d'élément on supprime
+        if(cache.size() > (long long unsigned)capacity){ //Si il y a trop d'élément on supprime
             Node* h = head;
             this->removeNode(head);
             cache.erase(h->key);
@@ -57,19 +74,35 @@ void LRUCache::put(int key, double value)
     }
 }
 
-int LRUCache::size() const
-{
+int LRUCache::size() const{
+/*
+Retourne la taille du cache
+*/
     return cache.size();
 }
 
-int LRUCache::getCapacity() const
-{
+int LRUCache::getCapacity() const{
+/*
+Retourne la capacité maximale du cache
+*/
+
     return capacity;
 }
 
 void LRUCache::printCache() const
 {
-    // TODO
+/*
+* Affiche le cache
+* 
+* Remarque : Pour afficher le cache, on parcours la liste de la tête à la queue, ce qui permet d'obtenir l'ordre du cache en plus, contrairement à ce que si on avait juste parcouru la table de correspondance 
+*/
+    Node* courant = head;
+    std::cout << "Cache (LRU --> MRU) | ";
+    while (courant != nullptr) {
+        std::cout << courant->key << " | ";
+        courant = courant->next;  
+    }
+    std::cout << std::endl;
 }
 
 void LRUCache::removeNode(Node* node){
@@ -120,7 +153,7 @@ Paramètre :
 }
 
 void LRUCache::moveToMostRecent(Node* node){
-/* Permet de move une node déjà dans la liste au début
+/* Permet de move une node déjà dans la liste à la fin de celle-ci
 
 Paramètre :
 - node (Node) : la node à bouger
