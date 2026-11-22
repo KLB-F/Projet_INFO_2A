@@ -1,7 +1,5 @@
 # Projet LRU - Squelette libre
 
-# Cache LRU et comparaison de politiques de remplacement
-
 ## Contexte
 
 Un système embarqué (un robot, par exemple) dispose d'une mémoire rapide mais
