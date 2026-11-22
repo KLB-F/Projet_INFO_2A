@@ -12,6 +12,8 @@ Le code utilise `unordered_map::contains`, il faut donc compiler en C++20 :
 g++ -std=c++20 -Wall -Wextra -O2 main.cpp LRUCache.cpp FIFO.cpp LFUCache.cpp Parser.cpp -o program.exe
 ```
 
+Le programme compile normalement sans erreur ni warning. Il passe aussi normalement les tests Valgrind (fuites mémoire).
+
 ## Utilisation
 
 ```bash
